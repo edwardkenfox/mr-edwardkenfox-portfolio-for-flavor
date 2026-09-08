@@ -18,7 +18,7 @@ export default function Scene4({ x0, data }) {
       {data.hobbies && <TextCard heading={data.hobbies.heading} lines={data.hobbies.lines} w={2.4} h={1.5} position={[x0 + 10.3, 1.8, -0.7]} rotation={[0, 0, 0.02]} />}
       {/* row of train-outing polaroids (same style as the original Enoden one) */}
       {(data.trainPhotos || []).map((ph, i) => (
-        <PaperPhoto key={i} src={ph.src} label={ph.caption} caption={ph.caption} w={1.55} h={1.75} tilt={(i % 2 ? 1 : -1) * 0.04} position={[x0 + 12.75 + i * 1.7, 1.75, -0.5 + i * 0.03]} />
+        <PaperPhoto key={i} src={ph.src} label={ph.caption} caption={ph.caption} w={1.55} h={1.75} tilt={(i % 2 ? 1 : -1) * 0.04} position={[x0 + 12.3 + i * 1.65, 1.75, -0.5 + i * 0.03]} />
       ))}
       {data.photos && <PhotoLine x0={x0 + 4.4} x1={x0 + 12.8} y={3.8} z={-0.35} photos={data.photos} photoW={1.05} photoH={1.2} />}
 
