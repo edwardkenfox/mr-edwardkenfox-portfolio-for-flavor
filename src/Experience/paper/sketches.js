@@ -214,10 +214,7 @@ export function rocket(ctx, W, H) {
   sketchPoly(ctx, P(n, [[0.32, 0.6], [0.18, 0.82], [0.34, 0.78]]), C.red, { width: 3, seed: 3 });
   sketchPoly(ctx, P(n, [[0.68, 0.6], [0.82, 0.82], [0.66, 0.78]]), C.red, { width: 3, seed: 4 });
   // body
-  const body = [];
-  for (let i = 0; i <= 12; i++) { const t = i / 12; body.push([n.x(0.32 + 0.36 * t), n.y(0.28 - Math.sin(t * Math.PI) * 0.24)]); }
-  body.push([n.x(0.68), n.y(0.8)], [n.x(0.32), n.y(0.8)]);
-  sketchPoly(ctx, body, C.white, { width: lw(W, H), seed: 5 });
+  sketchPoly(ctx, P(n, [[0.32, 0.29], [0.68, 0.29], [0.68, 0.8], [0.32, 0.8]]), C.white, { width: lw(W, H), seed: 5 });
   sketchPoly(ctx, P(n, [[0.32, 0.28], [0.5, 0.02], [0.68, 0.28]]), C.red, { width: 3, seed: 6 });
   sketchCircle(ctx, n.x(0.5), n.y(0.45), n.s(0.09), C.blue, { width: 3, seed: 7 });
   drawText(ctx, ["Booster"], { x: n.x(0.5), y: n.y(0.6), size: n.s(0.085), font: FONT_EN, align: "center" });
@@ -265,30 +262,25 @@ export function robot(ctx, W, H) {
 
 export function bagel(ctx, W, H) {
   const n = N(W, H);
-  const cx = n.x(0.5), cy = n.y(0.52);
-  // body: slightly squashed, irregular ring with a small hole
-  const outer = ellipsePts(cx, cy, n.s(0.46), n.s(0.4), 48).map(([x, y], i) => [x + Math.sin(i * 1.7) * 3, y + Math.cos(i * 2.3) * 3]);
-  sketchPoly(ctx, outer, "#d9954f", { width: lw(W, H), wobble: 3, seed: 11 });
-  // baked crust shading (darker top/right)
-  ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#8a4a1e";
-  ctx.beginPath(); ctx.ellipse(cx, cy, n.s(0.46), n.s(0.4), 0, -Math.PI * 0.95, Math.PI * 0.1); ctx.ellipse(cx, cy, n.s(0.3), n.s(0.25), 0, Math.PI * 0.1, -Math.PI * 0.95, true); ctx.fill(); ctx.restore();
-  // pale, matte inner ring around the hole (the chewy bit)
-  sketchPoly(ctx, ellipsePts(cx, cy + n.s(0.02), n.s(0.2), n.s(0.16), 32), "#e9b979", { width: 2, wobble: 2, seed: 12, passes: 1 });
-  // small hole
-  sketchPoly(ctx, ellipsePts(cx, cy + n.s(0.03), n.s(0.09), n.s(0.065), 24), "#f3efe4", { width: lw(W, H), wobble: 2, seed: 13 });
-  // glossy highlight crescent
-  ctx.save(); ctx.globalAlpha = 0.5; ctx.strokeStyle = "#fff3d6"; ctx.lineWidth = lw(W, H) * 1.6; ctx.lineCap = "round";
-  ctx.beginPath(); ctx.ellipse(cx, cy, n.s(0.35), n.s(0.29), 0, Math.PI * 1.05, Math.PI * 1.55); ctx.stroke(); ctx.restore();
-  // blistered dark spots
-  const rand = rng(31);
-  ctx.save(); ctx.globalAlpha = 0.35; ctx.fillStyle = "#6e3a14";
-  for (let i = 0; i < 9; i++) { const a = rand() * Math.PI * 2, r = n.s(0.27 + rand() * 0.14); ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.88, n.s(0.03 + rand() * 0.02), n.s(0.018), a, 0, Math.PI * 2); ctx.fill(); }
-  ctx.restore();
-  // sesame seeds, following the ring
-  for (let i = 0; i < 22; i++) {
-    const a = rand() * Math.PI * 2, r = n.s(0.24 + rand() * 0.18);
-    sketchPoly(ctx, ellipsePts(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.88, n.s(0.022), n.s(0.012), 8).map(([x, y]) => [x, y]), rand() > 0.3 ? C.cream : "#5a3a1e", { width: 1.2, passes: 1, seed: i, color: "#7a5a3a" });
-  }
+  const cx = n.x(0.5), cy = n.y(0.52), rx = n.s(0.46), ry = n.s(0.41);
+  // smooth golden body with a soft radial gradient (lighter ring, darker rim)
+  const g = ctx.createRadialGradient(cx - rx * 0.15, cy - ry * 0.25, ry * 0.2, cx, cy, rx);
+  g.addColorStop(0, "#ecc287"); g.addColorStop(0.55, "#d9a061"); g.addColorStop(1, "#b9793e");
+  ctx.save(); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  // baked blush on the upper-right
+  ctx.save(); ctx.globalAlpha = 0.35; ctx.fillStyle = "#a8642c"; ctx.beginPath(); ctx.ellipse(cx + rx * 0.18, cy - ry * 0.18, rx * 0.7, ry * 0.62, -0.5, -1.2, 1.4); ctx.ellipse(cx + rx * 0.18, cy - ry * 0.18, rx * 0.45, ry * 0.4, -0.5, 1.4, -1.2, true); ctx.fill(); ctx.restore();
+  // pale inner ring around the hole
+  ctx.save(); ctx.globalAlpha = 0.7; ctx.fillStyle = "#f0d3a0"; ctx.beginPath(); ctx.ellipse(cx, cy + ry * 0.05, rx * 0.38, ry * 0.33, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  // small, slightly irregular hole with an inner shadow
+  const hole = [];
+  for (let i = 0; i < 28; i++) { const a = (i / 28) * Math.PI * 2; const w = 1 + 0.08 * Math.sin(a * 3 + 0.7); hole.push([cx + Math.cos(a) * rx * 0.17 * w, cy + ry * 0.06 + Math.sin(a) * ry * 0.13 * w]); }
+  ctx.save(); ctx.fillStyle = "#8a5a2e"; ctx.beginPath(); hole.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = C.paper; ctx.beginPath(); hole.forEach(([x, y], i) => { const px = cx + (x - cx) * 0.8, py = cy + ry * 0.06 + (y - cy - ry * 0.06) * 0.8 + ry * 0.03; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.closePath(); ctx.fill(); ctx.restore();
+  // glossy highlight
+  ctx.save(); ctx.globalAlpha = 0.45; ctx.strokeStyle = "#fff6e0"; ctx.lineWidth = lw(W, H) * 1.8; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.ellipse(cx, cy, rx * 0.72, ry * 0.7, 0, Math.PI * 1.1, Math.PI * 1.5); ctx.stroke(); ctx.restore();
+  // thin, clean outline
+  ctx.save(); ctx.strokeStyle = "#7a4a22"; ctx.lineWidth = Math.max(2, lw(W, H) * 0.7); ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
 }
 
 export function oven(ctx, W, H) {
@@ -301,9 +293,14 @@ export function oven(ctx, W, H) {
 
 export function instagram(ctx, W, H) {
   const n = N(W, H);
-  sketchPoly(ctx, roundedRectPts(n.x(0.12), n.y(0.12), n.x(0.76), n.y(0.76), n.s(0.18)), C.pink, { width: lw(W, H), seed: 2 });
-  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.18), "rgba(0,0,0,0)", { width: lw(W, H), seed: 3 });
-  sketchCircle(ctx, n.x(0.72), n.y(0.28), n.s(0.04), C.ink, { width: 2, passes: 1 });
+  const x = n.x(0.1), y = n.y(0.1), w = n.x(0.8), h = n.y(0.8), r = n.s(0.2);
+  const g = ctx.createLinearGradient(x, y + h, x + w, y);
+  g.addColorStop(0, "#f9ce34"); g.addColorStop(0.5, "#ee2a7b"); g.addColorStop(1, "#6228d7");
+  ctx.save(); ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.strokeStyle = "#fff"; ctx.lineWidth = n.s(0.055); ctx.lineJoin = "round";
+  ctx.beginPath(); ctx.roundRect(x + w * 0.16, y + h * 0.16, w * 0.68, h * 0.68, r * 0.7); ctx.stroke();
+  ctx.beginPath(); ctx.arc(n.x(0.5), n.y(0.5), n.s(0.16), 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(n.x(0.7), n.y(0.3), n.s(0.04), 0, Math.PI * 2); ctx.fill(); ctx.restore();
 }
 
 // ---------- scene 4: プライベート ----------

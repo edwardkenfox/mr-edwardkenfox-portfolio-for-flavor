@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { PaperSprite, Stick } from "./paper/PaperSprite";
+import { PaperSprite } from "./paper/PaperSprite";
 import * as S from "./paper/sketches";
 import { makeCanvas, makeTexture, sketchCircle } from "./paper/canvasUtils";
 import { HERO_Y, HERO_Z, VEHICLE_THRESHOLDS } from "./curve";
@@ -131,7 +131,6 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
           </mesh>
         </group>
       ))}
-      <Stick x={0} top={0.4} bottom={-2.5} z={-0.08} />
     </group>
   );
 }

@@ -15,8 +15,11 @@ export default function Scene4({ x0, data }) {
       <TitleCard text={data.title} color="#a9d8e6" textColor="#1f4a5a" position={[x0 + 2.2, 3.05, -1.0]} rotation={[0, 0, -0.03]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.6} h={1.5} position={[x0 + 4.4, 1.85, -0.7]} rotation={[0, 0, 0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={3.0} h={1.6} position={[x0 + 7.6, 1.85, -0.6]} rotation={[0, 0, -0.015]} />
-      {data.hobbies && <TextCard heading={data.hobbies.heading} lines={data.hobbies.lines} w={2.4} h={1.5} position={[x0 + 10.5, 1.8, -0.7]} rotation={[0, 0, 0.02]} />}
-      <PaperPhoto src={data.photo.src} label={data.photo.label} caption={data.photo.caption} w={1.9} h={2.1} position={[x0 + 14.2, 1.85, -0.5]} />
+      {data.hobbies && <TextCard heading={data.hobbies.heading} lines={data.hobbies.lines} w={2.4} h={1.5} position={[x0 + 10.3, 1.8, -0.7]} rotation={[0, 0, 0.02]} />}
+      {/* row of train-outing polaroids (same style as the original Enoden one) */}
+      {(data.trainPhotos || []).map((ph, i) => (
+        <PaperPhoto key={i} src={ph.src} label={ph.caption} caption={ph.caption} w={1.55} h={1.75} tilt={(i % 2 ? 1 : -1) * 0.04} position={[x0 + 12.75 + i * 1.7, 1.75, -0.5 + i * 0.03]} />
+      ))}
       {data.photos && <PhotoLine x0={x0 + 4.4} x1={x0 + 12.8} y={3.8} z={-0.35} photos={data.photos} photoW={1.05} photoH={1.2} />}
 
       <PaperSprite paint={S.mountain} w={4.0} h={2.4} position={[x0 + 5.5, G + 1.2, -2.3]} />

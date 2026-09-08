@@ -96,13 +96,7 @@ export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 
     paperFill(ctx, W, H, color, 11);
     // glue band along the top (slightly lighter)
     ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H * 0.17); ctx.restore();
-    // faint pen doodle rays around the title
     const cx = W / 2, cy = H * 0.55;
-    for (let i = 0; i < 9; i++) {
-      const a = (i / 9) * Math.PI * 2 + 0.4;
-      const r1 = Math.min(W, H) * 0.36, r2 = r1 + 22;
-      sketchStroke(ctx, [[cx + Math.cos(a) * r1, cy + Math.sin(a) * r1 * 0.8], [cx + Math.cos(a) * r2, cy + Math.sin(a) * r2 * 0.8]], { width: 2.5, color: textColor, seed: i + 3, passes: 1 });
-    }
     const lines = text.split("\n");
     const size = Math.min(W / (Math.max(...lines.map((l) => l.length)) * 0.95 + 1.2), H * 0.3);
     drawText(ctx, lines, { x: cx, y: cy - (lines.length * size * 1.25) / 2, size, font: FONT_TITLE, color: textColor, lineHeight: 1.25, align: "center" });
