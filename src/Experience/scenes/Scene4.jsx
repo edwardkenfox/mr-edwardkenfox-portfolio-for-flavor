@@ -16,8 +16,8 @@ export default function Scene4({ x0, data }) {
       <TextCard heading={c1.heading} lines={c1.lines} w={2.6} h={1.5} position={[x0 + 4.4, 1.85, -0.7]} rotation={[0, 0, 0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={3.0} h={1.6} position={[x0 + 7.6, 1.85, -0.6]} rotation={[0, 0, -0.015]} />
       {data.hobbies && <TextCard heading={data.hobbies.heading} lines={data.hobbies.lines} w={2.4} h={1.5} position={[x0 + 10.5, 1.8, -0.7]} rotation={[0, 0, 0.02]} />}
-      <PaperPhoto src={data.photo.src} label={data.photo.label} caption={data.photo.caption} w={1.8} h={2.0} position={[x0 + 13.1, 1.9, -0.5]} />
-      {data.photos && <PhotoLine x0={x0 + 4.6} x1={x0 + 14.8} y={3.8} z={-0.35} photos={data.photos} photoW={1.05} photoH={1.2} />}
+      <PaperPhoto src={data.photo.src} label={data.photo.label} caption={data.photo.caption} w={1.9} h={2.1} position={[x0 + 14.2, 1.85, -0.5]} />
+      {data.photos && <PhotoLine x0={x0 + 4.4} x1={x0 + 12.8} y={3.8} z={-0.35} photos={data.photos} photoW={1.05} photoH={1.2} />}
 
       <PaperSprite paint={S.mountain} w={4.0} h={2.4} position={[x0 + 5.5, G + 1.2, -2.3]} />
       <PaperSprite paint={S.house} w={1.6} h={1.7} position={[x0 + 14.3, G + 0.85, -2.0]} />
