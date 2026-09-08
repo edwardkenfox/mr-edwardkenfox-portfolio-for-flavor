@@ -45,7 +45,7 @@ export function useCardGeometry(w, h, radius = 0.08) {
  * Generic paper card: `paint(ctx, W, H)` draws the front face.
  * Hover lifts the card toward the camera; `url` opens a link on click.
  */
-export function PaperCard({ w = 2, h = 1.4, paint, radius = 0.08, position = [0, 0, 0], rotation = [0, 0, 0], hoverLift = 0.5, url, sideColor = "#d9d2c3", seed = 1, children, ...rest }) {
+export function PaperCard({ w = 2, h = 1.4, paint, radius = 0.08, position = [0, 0, 0], rotation = [0, 0, 0], hoverLift = 0.5, url, sideColor = "#d9d2c3", seed = 1, shadow = false, children, ...rest }) {
   const geo = useCardGeometry(w, h, radius);
   const mats = useMemo(() => {
     const c = makeCanvas(Math.round(w * PX), Math.round(h * PX));
@@ -79,27 +79,53 @@ export function PaperCard({ w = 2, h = 1.4, paint, radius = 0.08, position = [0,
       onClick={(e) => { if (url) { e.stopPropagation(); window.open(url, "_blank", "noopener"); } }}
       {...rest}
     >
+      {shadow && (
+        <mesh position={[0.07, -0.09, -0.08]}>
+          <planeGeometry args={[w * 1.02, h * 1.02]} />
+          <meshBasicMaterial color="#000" transparent opacity={0.13} depthWrite={false} />
+        </mesh>
+      )}
       {children}
     </mesh>
   );
 }
 
-// sticky-note style title card (coloured paper, big handwritten title)
-export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 2.2, h = 1.5, ...rest }) {
+// sticky-note title: coloured square with a glue band, a curled corner, a push pin and a soft shadow
+export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 2.0, h = 1.9, pinColor = "#e0685c", ...rest }) {
   const paint = useMemo(() => (ctx, W, H) => {
     paperFill(ctx, W, H, color, 11);
-    // sun-ray doodle
-    const cx = W / 2, cy = H / 2;
-    for (let i = 0; i < 10; i++) {
-      const a = (i / 10) * Math.PI * 2 + 0.3;
-      const r1 = Math.min(W, H) * 0.42, r2 = r1 + 30;
-      sketchStroke(ctx, [[cx + Math.cos(a) * r1, cy + Math.sin(a) * r1], [cx + Math.cos(a) * r2, cy + Math.sin(a) * r2]], { width: 3, color: textColor, seed: i + 3, passes: 1 });
+    // glue band along the top (slightly lighter)
+    ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H * 0.17); ctx.restore();
+    // faint pen doodle rays around the title
+    const cx = W / 2, cy = H * 0.55;
+    for (let i = 0; i < 9; i++) {
+      const a = (i / 9) * Math.PI * 2 + 0.4;
+      const r1 = Math.min(W, H) * 0.36, r2 = r1 + 22;
+      sketchStroke(ctx, [[cx + Math.cos(a) * r1, cy + Math.sin(a) * r1 * 0.8], [cx + Math.cos(a) * r2, cy + Math.sin(a) * r2 * 0.8]], { width: 2.5, color: textColor, seed: i + 3, passes: 1 });
     }
     const lines = text.split("\n");
-    const size = Math.min(W / (Math.max(...lines.map((l) => l.length)) * 0.95 + 1), H * 0.32);
+    const size = Math.min(W / (Math.max(...lines.map((l) => l.length)) * 0.95 + 1.2), H * 0.3);
     drawText(ctx, lines, { x: cx, y: cy - (lines.length * size * 1.25) / 2, size, font: FONT_TITLE, color: textColor, lineHeight: 1.25, align: "center" });
-  }, [text, color, textColor]);
-  return <PaperCard w={w} h={h} paint={paint} sideColor={color} {...rest} />;
+    // curled bottom-right corner
+    const c = Math.min(W, H) * 0.16;
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.18)"; ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W, H); ctx.lineTo(W - c, H); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.globalAlpha = 0.9; ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W - c, H); ctx.lineTo(W - c * 0.9, H - c * 0.9); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    // push pin at the top centre
+    const px = W / 2, py = H * 0.085, pr = Math.min(W, H) * 0.045;
+    ctx.save(); ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.arc(px + pr * 0.5, py + pr * 0.7, pr, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    sketchCircleLocal(ctx, px, py, pr, pinColor);
+    ctx.save(); ctx.fillStyle = "rgba(255,255,255,0.55)"; ctx.beginPath(); ctx.arc(px - pr * 0.3, py - pr * 0.3, pr * 0.3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }, [text, color, textColor, pinColor]);
+  return <PaperCard w={w} h={h} radius={0.02} paint={paint} sideColor={color} shadow {...rest} />;
+}
+
+function sketchCircleLocal(ctx, cx, cy, r, fill) {
+  const pts = [];
+  for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+  ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill(); ctx.restore();
+  sketchStroke(ctx, pts, { close: true, width: 2.5, seed: 8, passes: 1 });
 }
 
 // white notebook-paper card with heading + body lines, sketched border

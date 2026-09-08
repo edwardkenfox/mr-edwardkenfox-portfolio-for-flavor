@@ -42,26 +42,39 @@ export function sun(ctx, W, H) {
   sketchStroke(ctx, [[n.x(0.44), n.y(0.56)], [n.x(0.5), n.y(0.6)], [n.x(0.56), n.y(0.56)]], { width: 3, passes: 1 });
 }
 
+// one sakura blossom: 5 notched petals around a centre
+function sakura(ctx, cx, cy, r, rot, seed) {
+  const petal = [[0, 0.05], [0.42, 0.3], [0.5, 0.75], [0.2, 1.0], [0, 0.82], [-0.2, 1.0], [-0.5, 0.75], [-0.42, 0.3]];
+  for (let i = 0; i < 5; i++) {
+    const a = rot + (i / 5) * Math.PI * 2;
+    const pts = petal.map(([px, py]) => {
+      const x = px * r, y = py * r;
+      return [cx + x * Math.cos(a) - y * Math.sin(a), cy + x * Math.sin(a) + y * Math.cos(a)];
+    });
+    sketchPoly(ctx, pts, i % 2 ? "#f7c6d0" : C.pink, { width: 2, wobble: 1.5, seed: seed + i, passes: 1 });
+  }
+  ctx.fillStyle = "#e5738a";
+  ctx.beginPath(); ctx.arc(cx, cy, r * 0.16, 0, Math.PI * 2); ctx.fill();
+  for (let i = 0; i < 5; i++) { const a = rot + (i / 5) * Math.PI * 2 + 0.6; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r * 0.3, cy + Math.sin(a) * r * 0.3, r * 0.05, 0, Math.PI * 2); ctx.fill(); }
+}
+
 export function cherryTree(ctx, W, H) {
   const n = N(W, H);
-  // trunk
-  sketchPoly(ctx, P(n, [[0.44, 0.98], [0.46, 0.6], [0.35, 0.45], [0.4, 0.44], [0.48, 0.55], [0.5, 0.35], [0.55, 0.35], [0.54, 0.55], [0.64, 0.42], [0.68, 0.45], [0.56, 0.62], [0.58, 0.98]]), C.wood, { width: lw(W, H), seed: 5 });
-  // blossoms
+  // trunk + branches
+  sketchPoly(ctx, P(n, [[0.44, 0.98], [0.46, 0.62], [0.3, 0.46], [0.22, 0.34], [0.27, 0.32], [0.36, 0.44], [0.47, 0.5], [0.49, 0.3], [0.54, 0.3], [0.54, 0.5], [0.64, 0.4], [0.76, 0.32], [0.79, 0.36], [0.66, 0.46], [0.56, 0.62], [0.58, 0.98]]), C.wood, { width: lw(W, H), seed: 5 });
+  // blossoms: a few big, many small, clustered around branch tips
   const rand = rng(21);
-  const blobs = [[0.3, 0.38], [0.45, 0.25], [0.6, 0.22], [0.72, 0.36], [0.5, 0.42], [0.36, 0.52], [0.66, 0.5]];
-  for (const [bx, by] of blobs) {
-    for (let k = 0; k < 5; k++) {
-      const px = n.x(bx) + (rand() - 0.5) * n.s(0.16), py = n.y(by) + (rand() - 0.5) * n.s(0.16);
-      const r = n.s(0.045 + rand() * 0.02);
-      const petals = [];
-      for (let i = 0; i < 5; i++) {
-        const a = (i / 5) * Math.PI * 2;
-        petals.push(...circlePts(px + Math.cos(a) * r * 0.6, py + Math.sin(a) * r * 0.6, r * 0.5, 8).filter((_, j) => j < 5).map((p) => p));
-      }
-      sketchCircle(ctx, px, py, r, C.pink, { width: 2.5, wobble: 3, seed: k + bx * 100, passes: 1 });
-      ctx.fillStyle = "#e07a8a";
-      ctx.beginPath(); ctx.arc(px, py, r * 0.2, 0, Math.PI * 2); ctx.fill();
+  const tips = [[0.24, 0.33], [0.5, 0.28], [0.77, 0.33], [0.36, 0.46], [0.64, 0.44], [0.5, 0.18], [0.3, 0.2], [0.7, 0.2]];
+  for (const [bx, by] of tips) {
+    for (let k = 0; k < 3; k++) {
+      const px = n.x(bx) + (rand() - 0.5) * n.s(0.22), py = n.y(by) + (rand() - 0.5) * n.s(0.18);
+      sakura(ctx, px, py, n.s(0.05 + rand() * 0.03), rand() * Math.PI, k * 7 + bx * 100);
     }
+  }
+  // a couple of falling petals
+  for (let i = 0; i < 5; i++) {
+    const px = n.x(0.15 + rand() * 0.7), py = n.y(0.6 + rand() * 0.3);
+    sketchPoly(ctx, ellipsePts(px, py, n.s(0.02), n.s(0.012), 8), C.pink, { width: 1.5, passes: 1, seed: i });
   }
 }
 
@@ -252,16 +265,29 @@ export function robot(ctx, W, H) {
 
 export function bagel(ctx, W, H) {
   const n = N(W, H);
-  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.45), C.wood, { width: lw(W, H), wobble: 4, seed: 11 });
-  // shading crust
-  ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = C.brown;
-  ctx.beginPath(); ctx.arc(n.x(0.5), n.y(0.5), n.s(0.45), Math.PI * 0.1, Math.PI * 0.9); ctx.arc(n.x(0.5), n.y(0.5), n.s(0.3), Math.PI * 0.9, Math.PI * 0.1, true); ctx.fill(); ctx.restore();
-  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.16), "rgba(0,0,0,0)", { width: lw(W, H), wobble: 3, seed: 12 });
-  // sesame
+  const cx = n.x(0.5), cy = n.y(0.52);
+  // body: slightly squashed, irregular ring with a small hole
+  const outer = ellipsePts(cx, cy, n.s(0.46), n.s(0.4), 48).map(([x, y], i) => [x + Math.sin(i * 1.7) * 3, y + Math.cos(i * 2.3) * 3]);
+  sketchPoly(ctx, outer, "#d9954f", { width: lw(W, H), wobble: 3, seed: 11 });
+  // baked crust shading (darker top/right)
+  ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#8a4a1e";
+  ctx.beginPath(); ctx.ellipse(cx, cy, n.s(0.46), n.s(0.4), 0, -Math.PI * 0.95, Math.PI * 0.1); ctx.ellipse(cx, cy, n.s(0.3), n.s(0.25), 0, Math.PI * 0.1, -Math.PI * 0.95, true); ctx.fill(); ctx.restore();
+  // pale, matte inner ring around the hole (the chewy bit)
+  sketchPoly(ctx, ellipsePts(cx, cy + n.s(0.02), n.s(0.2), n.s(0.16), 32), "#e9b979", { width: 2, wobble: 2, seed: 12, passes: 1 });
+  // small hole
+  sketchPoly(ctx, ellipsePts(cx, cy + n.s(0.03), n.s(0.09), n.s(0.065), 24), "#f3efe4", { width: lw(W, H), wobble: 2, seed: 13 });
+  // glossy highlight crescent
+  ctx.save(); ctx.globalAlpha = 0.5; ctx.strokeStyle = "#fff3d6"; ctx.lineWidth = lw(W, H) * 1.6; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.ellipse(cx, cy, n.s(0.35), n.s(0.29), 0, Math.PI * 1.05, Math.PI * 1.55); ctx.stroke(); ctx.restore();
+  // blistered dark spots
   const rand = rng(31);
-  for (let i = 0; i < 14; i++) {
-    const a = rand() * Math.PI * 2, r = n.s(0.22 + rand() * 0.18);
-    sketchPoly(ctx, ellipsePts(n.x(0.5) + Math.cos(a) * r, n.y(0.5) + Math.sin(a) * r, n.s(0.02), n.s(0.012), 8), C.cream, { width: 1.5, passes: 1, seed: i });
+  ctx.save(); ctx.globalAlpha = 0.35; ctx.fillStyle = "#6e3a14";
+  for (let i = 0; i < 9; i++) { const a = rand() * Math.PI * 2, r = n.s(0.27 + rand() * 0.14); ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.88, n.s(0.03 + rand() * 0.02), n.s(0.018), a, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+  // sesame seeds, following the ring
+  for (let i = 0; i < 22; i++) {
+    const a = rand() * Math.PI * 2, r = n.s(0.24 + rand() * 0.18);
+    sketchPoly(ctx, ellipsePts(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.88, n.s(0.022), n.s(0.012), 8).map(([x, y]) => [x, y]), rand() > 0.3 ? C.cream : "#5a3a1e", { width: 1.2, passes: 1, seed: i, color: "#7a5a3a" });
   }
 }
 

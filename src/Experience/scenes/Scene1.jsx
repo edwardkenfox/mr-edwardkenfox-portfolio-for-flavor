@@ -16,7 +16,7 @@ export default function Scene1({ x0, data }) {
       <Handwriting lines={[data.footnote]} size={0.15} w={4.2} h={0.6} position={[x0 + 12.6, 1.0, -0.9]} rotation={[0, 0, -0.03]} />
 
       {/* props */}
-      <PaperSprite paint={S.cherryTree} w={2.6} h={3.0} position={[x0 + 0.9, G + 1.5, -1.9]} />
+      <PaperSprite paint={S.cherryTree} w={3.0} h={3.2} position={[x0 + 0.9, G + 1.6, -1.9]} />
       <PaperSprite paint={S.pencil} w={1.6} h={0.5} position={[x0 + 5.3, 3.15, -1.6]} rotation={[0, 0, 0.35]} sway={0.03} seedOffset={1} />
       <PaperSprite paint={S.videoCamera} w={1.3} h={1.0} position={[x0 + 10.4, 3.15, -1.7]} sway={0.03} seedOffset={2} />
       <Stick x={x0 + 10.4} top={3.0} bottom={G} z={-1.75} />
