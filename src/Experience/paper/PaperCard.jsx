@@ -53,7 +53,7 @@ export function PaperCard({ w = 2, h = 1.4, paint, radius = 0.08, position = [0,
     paint(ctx, c.width, c.height);
     const tex = makeTexture(c);
     return [
-      new THREE.MeshBasicMaterial({ map: tex }),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5 }),
       new THREE.MeshBasicMaterial({ color: sideColor }),
     ];
   }, [w, h, paint, sideColor]);
@@ -94,17 +94,25 @@ export function PaperCard({ w = 2, h = 1.4, paint, radius = 0.08, position = [0,
 export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 2.0, h = 1.9, pinColor = "#e0685c", ...rest }) {
   const paint = useMemo(() => (ctx, W, H) => {
     paperFill(ctx, W, H, color, 11);
-    // glue band along the top (slightly lighter)
-    ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H * 0.17); ctx.restore();
     const cx = W / 2, cy = H * 0.55;
     const lines = text.split("\n");
     const size = Math.min(W / (Math.max(...lines.map((l) => l.length)) * 0.95 + 1.2), H * 0.3);
     drawText(ctx, lines, { x: cx, y: cy - (lines.length * size * 1.25) / 2, size, font: FONT_TITLE, color: textColor, lineHeight: 1.25, align: "center" });
-    // curled bottom-right corner
-    const c = Math.min(W, H) * 0.16;
+    // curled bottom-right corner: cut the corner away (transparent) and draw the folded flap
+    const c = Math.min(W, H) * 0.17;
     ctx.save();
-    ctx.fillStyle = "rgba(0,0,0,0.18)"; ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W, H); ctx.lineTo(W - c, H); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "#fff"; ctx.globalAlpha = 0.9; ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W - c, H); ctx.lineTo(W - c * 0.9, H - c * 0.9); ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath(); ctx.moveTo(W + 2, H - c); ctx.lineTo(W + 2, H + 2); ctx.lineTo(W - c, H + 2); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    ctx.save();
+    const fg = ctx.createLinearGradient(W - c, H, W - c * 0.2, H - c * 0.2);
+    fg.addColorStop(0, "#ffffff"); fg.addColorStop(1, color);
+    ctx.fillStyle = fg;
+    ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W - c, H); ctx.lineTo(W - c * 0.92, H - c * 0.92); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,0.25)"; ctx.lineWidth = 1.5; ctx.stroke();
+    // soft shadow the flap casts onto the note
+    ctx.globalAlpha = 0.18; ctx.fillStyle = "#000";
+    ctx.beginPath(); ctx.moveTo(W - c * 0.92, H - c * 0.92); ctx.lineTo(W - c * 1.15, H - c * 0.55); ctx.lineTo(W - c * 0.55, H - c * 1.15); ctx.closePath(); ctx.fill();
     ctx.restore();
     // push pin at the top centre
     const px = W / 2, py = H * 0.085, pr = Math.min(W, H) * 0.045;
