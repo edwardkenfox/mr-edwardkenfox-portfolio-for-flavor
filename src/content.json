@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "title": "Edward Fox 自己紹介",
+    "hint": "🦊 スクロール / ドラッグで進みます",
+    "credit": "Inspired by Mr. Panda's Psychologically Safe Portfolio (Andrew Woan, MIT)"
+  },
+  "hero": {
+    "photo": null,
+    "name": "Edward Fox"
+  },
+  "scene1": {
+    "title": "01 経歴",
+    "cards": [
+      {
+        "heading": "美大からエンジニアへ",
+        "lines": [
+          "武蔵野美術大学 造形学部 卒。",
+          "絵を描く側から、",
+          "コードを書く側へ。"
+        ]
+      },
+      {
+        "heading": "Repro (2014〜現在)",
+        "lines": [
+          "創業直後にジョイン。",
+          "以来ずっと同じ会社にいます。",
+          "初期は日本とウクライナのチームを",
+          "見ながら JavaScript SDK を開発。"
+        ]
+      }
+    ],
+    "footnote": "第二種電気工事士 / FP 3級 も持っています。"
+  },
+  "scene2": {
+    "title": "02 本業",
+    "cards": [
+      {
+        "heading": "Repro Booster",
+        "lines": [
+          "2021年に自分で起案。",
+          "半年で特許を取得し、",
+          "いまは 100社以上 に導入。"
+        ]
+      },
+      {
+        "heading": "PM 兼 開発責任者",
+        "lines": [
+          "技術とビジネスの",
+          "両方をしゃべる係です。"
+        ]
+      }
+    ],
+    "recenoNote": [
+      "Re:CENO さんにも Booster を",
+      "使っていただいています。",
+      "実は名前を知ったのは",
+      "そちらが先でした。"
+    ]
+  },
+  "scene3": {
+    "title": "03 副業とベーグル",
+    "cards": [
+      {
+        "heading": "AI シミュレーター",
+        "lines": [
+          "副業で AI シミュレーターの",
+          "開発をご一緒しています。"
+        ]
+      },
+      {
+        "heading": "Fox Bagels",
+        "lines": [
+          "週末はベーグルを焼いています。",
+          "Instagram: @fox_bagels"
+        ],
+        "url": "https://www.instagram.com/"
+      }
+    ]
+  },
+  "scene4": {
+    "title": "04 プライベート",
+    "cards": [
+      {
+        "heading": "茅ヶ崎へ",
+        "lines": [
+          "2026年8月に引っ越しました。",
+          "サーフィン、料理とお酒。"
+        ]
+      },
+      {
+        "heading": "二児の父",
+        "lines": [
+          "上の息子が乗り物好きで、",
+          "週末は一緒に電車に乗りに行きます。"
+        ]
+      }
+    ],
+    "photo": { "src": null, "label": "江ノ電の写真", "caption": "江ノ電" }
+  },
+  "scene5": {
+    "title": "05 Re:CENO でやりたいこと",
+    "cards": [
+      {
+        "heading": "買える部屋を出す",
+        "lines": [
+          "実際に買える商品が並ぶ部屋を",
+          "出せるところまで来ています。"
+        ]
+      },
+      {
+        "heading": "作って終わりにしない",
+        "lines": [
+          "数字を見ながら、",
+          "次に何をやるかを決めたい。"
+        ]
+      }
+    ],
+    "closing": [
+      "社内の AI 活用も、",
+      "何かあればぜひ。"
+    ]
+  },
+  "singleSheet": {
+    "sign": ["おまけ:", "音楽の話"],
+    "cards": [
+      { "heading": "振れ幅 その1", "lines": ["（ここに1つめ）"] },
+      { "heading": "振れ幅 その2", "lines": ["（ここに2つめ）"] },
+      { "heading": "振れ幅 その3", "lines": ["（ここに3つめ）"] }
+    ]
+  }
+}
