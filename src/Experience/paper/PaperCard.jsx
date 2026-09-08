@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import {
-  makeCanvas, makeTexture, paperFill, roundedRectPts, sketchStroke, drawText,
+  makeCanvas, makeTexture, paperFill, roundedRectPts, sketchStroke, drawText, measureTextBlock,
   FONT_JP, FONT_TITLE, INK,
 } from "./canvasUtils";
 
@@ -104,6 +104,16 @@ export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 
 
 // white notebook-paper card with heading + body lines, sketched border
 export function TextCard({ heading, lines = [], w = 2.6, h = 1.7, fontSize = 0.11, headingSize = 0.15, bg = "#f9f7f1", ...rest }) {
+  // grow the card so long text never overflows (h is treated as a minimum)
+  const hFit = useMemo(() => {
+    const c = makeCanvas(8, 8);
+    const ctx = c.getContext("2d");
+    const W = Math.round(w * PX), pad = 0.1 * PX;
+    let px = pad;
+    if (heading) px += measureTextBlock(ctx, [heading], { size: headingSize * PX, font: FONT_TITLE, lineHeight: 1.3, maxWidth: W - pad * 2 }).height + 14;
+    px += measureTextBlock(ctx, lines, { size: fontSize * PX, font: FONT_JP, lineHeight: 1.5, maxWidth: W - pad * 2 }).height + pad;
+    return Math.max(h, Math.ceil((px / PX) * 20) / 20);
+  }, [heading, lines, w, h, fontSize, headingSize]);
   const paint = useMemo(() => (ctx, W, H) => {
     paperFill(ctx, W, H, bg, 5);
     const pad = 0.1 * PX;
@@ -118,11 +128,11 @@ export function TextCard({ heading, lines = [], w = 2.6, h = 1.7, fontSize = 0.1
     }
     drawText(ctx, lines, { x: pad, y, size: fontSize * PX, font: FONT_JP, lineHeight: 1.5, maxWidth: W - pad * 2 });
   }, [heading, lines, fontSize, headingSize, bg]);
-  return <PaperCard w={w} h={h} paint={paint} {...rest} />;
+  return <PaperCard w={w} h={hFit} paint={paint} {...rest} />;
 }
 
 // free-floating handwriting directly on the notebook (no card): transparent plane
-export function Handwriting({ lines, size = 0.16, w = 4, h = 1.6, color = INK, font = FONT_JP, align = "left", position = [0, 0, 0], rotation = [0, 0, 0] }) {
+export function Handwriting({ lines, size = 0.16, w = 4, h = 1.6, color = INK, font = FONT_JP, align = "left", position = [0, 0, 0], rotation = [0, 0, 0], url }) {
   const tex = useMemo(() => {
     const c = makeCanvas(Math.round(w * PX), Math.round(h * PX));
     const ctx = c.getContext("2d");
@@ -131,7 +141,13 @@ export function Handwriting({ lines, size = 0.16, w = 4, h = 1.6, color = INK, f
     return makeTexture(c);
   }, [lines, size, w, h, color, font, align]);
   return (
-    <mesh position={position} rotation={rotation}>
+    <mesh
+      position={position}
+      rotation={rotation}
+      onPointerEnter={() => { if (url) document.body.style.cursor = "pointer"; }}
+      onPointerLeave={() => { if (url) document.body.style.cursor = "auto"; }}
+      onClick={(e) => { if (url) { e.stopPropagation(); window.open(url, "_blank", "noopener"); } }}
+    >
       <planeGeometry args={[w, h]} />
       <meshBasicMaterial map={tex} transparent alphaTest={0.05} depthWrite={false} />
     </mesh>

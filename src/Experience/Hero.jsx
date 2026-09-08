@@ -98,8 +98,8 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
           <PaperSprite paint={v.paint} w={v.w} h={v.h} position={[0, v.h / 2, 0]} />
           {/* rider */}
           {!v.hideBody && <PaperSprite paint={S.heroBody} w={0.7} h={0.7} position={[0.02, v.seatY + 0.3, 0.06]} thickness={false} />}
-          <mesh position={[0, v.headY - 0.05, v.headZ ?? 0.12]} scale={v.headScale ?? 1}>
-            <planeGeometry args={[0.72, 0.72]} />
+          <mesh position={[0, v.headY + 0.02, v.headZ ?? 0.12]} scale={v.headScale ?? 1}>
+            <planeGeometry args={[0.86, 0.86]} />
             <meshBasicMaterial map={head} transparent alphaTest={0.5} />
           </mesh>
         </group>

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { PaperCard, TitleCard, TextCard } from "../paper/PaperCard";
+import { PaperCard, TitleCard, TextCard, Handwriting } from "../paper/PaperCard";
 import { PaperSprite, Stick } from "../paper/PaperSprite";
 import { paperFill, notebookLines } from "../paper/canvasUtils";
 import * as S from "../paper/sketches";
@@ -21,6 +21,7 @@ export default function SingleSheet({ x0, data }) {
       {data.cards.map((c, i) => (
         <TextCard key={i} heading={c.heading} lines={c.lines} w={2.1} h={1.4} position={[cx - 2.4 + i * 2.4, 1.5, -1.0 + i * 0.05]} rotation={[0, 0, (i - 1) * 0.03]} />
       ))}
+      {data.follow && <Handwriting lines={data.follow} size={0.17} w={4.6} h={0.75} align="center" position={[cx, 0.3, -0.9]} rotation={[0, 0, -0.02]} url={data.followUrl} />}
       <Stick x={cx + 0.3} top={3.0} bottom={-3} z={-1.25} />
     </group>
   );

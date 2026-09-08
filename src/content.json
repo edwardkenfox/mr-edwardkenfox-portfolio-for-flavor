@@ -5,34 +5,31 @@
     "credit": "Inspired by Mr. Panda's Psychologically Safe Portfolio (Andrew Woan, MIT)"
   },
   "hero": {
-    "photo": null,
+    "photo": "/photos/edward-head.jpg",
     "name": "Edward Fox"
   },
   "scene1": {
-    "title": "01 経歴",
+    "title": "経歴",
     "cards": [
       {
         "heading": "美大からエンジニアへ",
         "lines": [
-          "武蔵野美術大学 造形学部 卒。",
-          "絵を描く側から、",
-          "コードを書く側へ。"
+          "武蔵野美術大学 造形学部卒。",
+          "なぜか美大に行ってしまったものの、芸術よりもビジネスへの関心が強くなる。スタートアップの世界に憧れてプログラミングの学習を開始。ウェブサイト制作のアルバイト"
         ]
       },
       {
         "heading": "Repro (2014〜現在)",
         "lines": [
-          "創業直後にジョイン。",
-          "以来ずっと同じ会社にいます。",
-          "初期は日本とウクライナのチームを",
-          "見ながら JavaScript SDK を開発。"
+          "創業直後にエンジニアとしてジョイン。さまざまな機能開発やプロジェクトに携わる。",
+          ""
         ]
       }
     ],
     "footnote": "第二種電気工事士 / FP 3級 も持っています。"
   },
   "scene2": {
-    "title": "02 本業",
+    "title": "本業",
     "cards": [
       {
         "heading": "Repro Booster",
@@ -58,7 +55,7 @@
     ]
   },
   "scene3": {
-    "title": "03 副業とベーグル",
+    "title": "副業",
     "cards": [
       {
         "heading": "AI シミュレーター",
@@ -71,14 +68,19 @@
         "heading": "Fox Bagels",
         "lines": [
           "週末はベーグルを焼いています。",
-          "Instagram: @fox_bagels"
+          "Instagram: @foxbagels"
         ],
-        "url": "https://www.instagram.com/"
+        "url": "https://www.instagram.com/foxbagels/"
       }
-    ]
+    ],
+    "photo": {
+      "src": "/photos/bagels.jpg",
+      "label": "Fox Bagels の屋台",
+      "caption": "Fox Bagels"
+    }
   },
   "scene4": {
-    "title": "04 プライベート",
+    "title": "プライベート",
     "cards": [
       {
         "heading": "茅ヶ崎へ",
@@ -95,10 +97,44 @@
         ]
       }
     ],
-    "photo": { "src": null, "label": "江ノ電の写真", "caption": "江ノ電" }
+    "photo": {
+      "src": null,
+      "label": "江ノ電の写真",
+      "caption": "江ノ電"
+    },
+    "hobbies": {
+      "heading": "趣味",
+      "lines": [
+        "ビール、料理、バスケ、",
+        "アウトドア、旅行、DIY、",
+        "音楽、犬。"
+      ]
+    },
+    "photos": [
+      {
+        "src": "/photos/family.jpg",
+        "caption": "息子と"
+      },
+      {
+        "src": "/photos/dog.jpg",
+        "caption": "犬"
+      },
+      {
+        "src": "/photos/beer.jpg",
+        "caption": "ビール"
+      },
+      {
+        "src": "/photos/basketball.jpg",
+        "caption": "バスケ"
+      },
+      {
+        "src": "/photos/camp.jpg",
+        "caption": "キャンプ"
+      }
+    ]
   },
   "scene5": {
-    "title": "05 Re:CENO でやりたいこと",
+    "title": "Re:CENO でやりたいこと",
     "cards": [
       {
         "heading": "買える部屋を出す",
@@ -121,11 +157,33 @@
     ]
   },
   "singleSheet": {
-    "sign": ["おまけ:", "音楽の話"],
+    "sign": [
+      "最近のオススメ"
+    ],
     "cards": [
-      { "heading": "振れ幅 その1", "lines": ["（ここに1つめ）"] },
-      { "heading": "振れ幅 その2", "lines": ["（ここに2つめ）"] },
-      { "heading": "振れ幅 その3", "lines": ["（ここに3つめ）"] }
-    ]
+      {
+        "heading": "振れ幅 その1",
+        "lines": [
+          "（ここに1つめ）"
+        ]
+      },
+      {
+        "heading": "振れ幅 その2",
+        "lines": [
+          "（ここに2つめ）"
+        ]
+      },
+      {
+        "heading": "振れ幅 その3",
+        "lines": [
+          "（ここに3つめ）"
+        ]
+      }
+    ],
+    "follow": [
+      "よければフォローおねがいします！",
+      "@edwardkenfox"
+    ],
+    "followUrl": "https://x.com/edwardkenfox"
   }
 }
