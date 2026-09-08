@@ -11,8 +11,8 @@ export default function Scene5({ x0, data }) {
   // keep everything left of x0+11 so the loop seam (world swap) is never visible
   return (
     <group>
-      <TitleCard text={data.title} color="#c9dfc2" textColor="#25412a" w={2.8} h={1.6} position={[x0 + 2.2, 3.05, -1.0]} rotation={[0, 0, 0.03]} />
-      <TextCard heading={c1.heading} lines={c1.lines} w={2.9} h={1.55} position={[x0 + 4.3, 2.0, -0.7]} rotation={[0, 0, -0.02]} />
+      <TitleCard text={data.title} color="#c9dfc2" textColor="#25412a" w={2.8} h={1.9} position={[x0 + 1.6, 3.2, -1.0]} rotation={[0, 0, 0.03]} />
+      <TextCard heading={c1.heading} lines={c1.lines} w={2.9} h={1.55} position={[x0 + 4.6, 2.0, -0.7]} rotation={[0, 0, -0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={2.7} h={1.5} position={[x0 + 7.5, 2.0, -0.6]} rotation={[0, 0, 0.02]} />
       <Handwriting lines={data.closing} size={0.17} w={3.0} h={0.9} position={[x0 + 9.6, 3.3, -0.9]} rotation={[0, 0, -0.03]} />
 

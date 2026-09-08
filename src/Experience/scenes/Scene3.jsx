@@ -11,7 +11,7 @@ export default function Scene3({ x0, data }) {
   const [c1, c2] = data.cards;
   return (
     <group>
-      <TitleCard text={data.title} color="#f7d98c" textColor="#5a4410" position={[x0 + 2.4, 3.05, -1.0]} rotation={[0, 0, 0.03]} />
+      <TitleCard text={data.title} color="#f7d98c" textColor="#5a4410" position={[x0 + 2.0, 3.2, -1.0]} rotation={[0, 0, 0.03]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.7} h={1.5} position={[x0 + 4.6, 2.0, -0.7]} rotation={[0, 0, -0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={2.9} h={1.55} position={[x0 + 9.2, 2.0, -0.6]} rotation={[0, 0, 0.02]} url={c2.url} />
       {data.follow && <Handwriting lines={data.follow} size={0.15} w={3.4} h={0.6} align="center" position={[x0 + 9.2, 0.8, -0.55]} rotation={[0, 0, -0.02]} url={data.followUrl} />}

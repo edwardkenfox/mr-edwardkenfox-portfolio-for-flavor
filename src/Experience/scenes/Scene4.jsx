@@ -12,7 +12,7 @@ export default function Scene4({ x0, data }) {
   const [c1, c2] = data.cards;
   return (
     <group>
-      <TitleCard text={data.title} color="#a9d8e6" textColor="#1f4a5a" position={[x0 + 2.2, 3.05, -1.0]} rotation={[0, 0, -0.03]} />
+      <TitleCard text={data.title} color="#a9d8e6" textColor="#1f4a5a" position={[x0 + 1.9, 3.2, -1.0]} rotation={[0, 0, -0.03]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.6} h={1.5} position={[x0 + 4.4, 1.85, -0.7]} rotation={[0, 0, 0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={3.0} h={1.6} position={[x0 + 7.6, 1.85, -0.6]} rotation={[0, 0, -0.015]} />
       {data.hobbies && <TextCard heading={data.hobbies.heading} lines={data.hobbies.lines} w={2.4} h={1.5} position={[x0 + 10.3, 1.8, -0.7]} rotation={[0, 0, 0.02]} />}

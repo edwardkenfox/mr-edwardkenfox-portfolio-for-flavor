@@ -10,7 +10,7 @@ export default function Scene2({ x0, data }) {
   const [c1, c2] = data.cards;
   return (
     <group>
-      <TitleCard text={data.title} color="#f6c9a0" textColor="#5a3a1a" position={[x0 + 2.2, 3.05, -1.0]} rotation={[0, 0, -0.04]} />
+      <TitleCard text={data.title} color="#f6c9a0" textColor="#5a3a1a" position={[x0 + 1.9, 3.2, -1.0]} rotation={[0, 0, -0.04]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.9} h={1.8} position={[x0 + 4.6, 1.9, -0.7]} rotation={[0, 0, 0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={2.6} h={1.5} position={[x0 + 8.2, 2.0, -0.8]} rotation={[0, 0, -0.02]} />
       <Handwriting lines={data.recenoNote} size={0.15} w={3.6} h={1.4} position={[x0 + 12.4, 2.0, -0.9]} rotation={[0, 0, 0.02]} />
