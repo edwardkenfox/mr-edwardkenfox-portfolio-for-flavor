@@ -59,8 +59,9 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
       if (!group.current) return;
       const p = scrollProgress.current;
       const camX = cameraGroup.current ? cameraGroup.current.position.x : state.camera.position.x;
-      // hero rides slightly left of the camera centre
-      const tx = camX - 1.3;
+      // hero rides slightly left of the camera centre (less offset on narrow / portrait screens)
+      const aspect = state.size.width / Math.max(1, state.size.height);
+      const tx = camX - Math.min(1.3, 0.75 * aspect);
       const k = 1 - Math.pow(0.88, Math.min(delta, 0.5) * 60);
       group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, tx, k);
       bob.current += delta;
