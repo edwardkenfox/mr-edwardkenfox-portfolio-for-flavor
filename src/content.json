@@ -77,7 +77,11 @@
       "src": "/photos/bagels.jpg",
       "label": "Fox Bagels の屋台",
       "caption": "Fox Bagels"
-    }
+    },
+    "follow": [
+      "よければフォローお願いします！ @foxbagels"
+    ],
+    "followUrl": "https://www.instagram.com/foxbagels/"
   },
   "scene4": {
     "title": "プライベート",
@@ -180,10 +184,13 @@
         ]
       }
     ],
-    "follow": [
-      "よければフォローおねがいします！",
-      "@edwardkenfox"
-    ],
-    "followUrl": "https://x.com/edwardkenfox"
+    "videos": [
+      {
+        "id": "0Ssi-9wS1so"
+      },
+      {
+        "id": "z0pzzkp85-Q"
+      }
+    ]
   }
 }

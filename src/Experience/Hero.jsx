@@ -13,13 +13,21 @@ function heroDebug(text) {
   d.textContent = text;
 }
 
+// wheels: positions as fractions of the sprite (x from left, y from top, r relative to min(w,h))
+const bikeWheels = (paint) => S.BICYCLE_WHEELS.map((w) => ({ ...w, paint }));
 const VEHICLES = {
-  bicycle: { paint: S.bicycle, w: 1.7, h: 1.2, seatY: 0.62, headY: 1.62 },
+  bicycle: { paint: S.bicycleFrame, w: 1.7, h: 1.2, seatY: 0.62, headY: 1.62, wheels: bikeWheels(S.wheel) },
   rocket: { paint: S.rocket, w: 1.1, h: 1.9, seatY: 0.95, headY: 1.9 * (1 - 0.45) + 0.05, hideBody: true, headScale: 0.34, headZ: 0.13 },
-  bagelCycle: { paint: S.bagelCycle, w: 1.7, h: 1.2, seatY: 0.62, headY: 1.62 },
-  enoden: { paint: S.enoden, w: 2.6, h: 1.3, seatY: 1.25, headY: 2.15 },
+  bagelCycle: { paint: S.bicycleFrame, w: 1.7, h: 1.2, seatY: 0.62, headY: 1.62, wheels: bikeWheels(S.bagel) },
+  enoden: { paint: S.enoden, w: 2.6, h: 1.3, seatY: 1.25, headY: 2.15, wheels: S.ENODEN_WHEELS.map((w) => ({ ...w, paint: S.trainWheel })) },
   armchair: { paint: S.armchair, w: 1.5, h: 1.3, seatY: 0.6, headY: 1.55 },
 };
+
+// world-space wheel placement for a vehicle sprite of size w x h sitting on y=0
+function wheelPlacement(v, wh) {
+  const r = wh.r * Math.min(v.w, v.h);
+  return { x: (wh.x - 0.5) * v.w, y: (1 - wh.y) * v.h, r };
+}
 
 // circular photo head with white paper rim; falls back to a doodled fox
 function useHeadTexture(src) {
@@ -52,6 +60,9 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
   const head = useHeadTexture(photo);
   const current = useRef("bicycle");
   const vehicleRefs = useRef({});
+  const wheelRefs = useRef({});
+  const wheelAngle = useRef(0);
+  const lastX = useRef(null);
   const bob = useRef(0);
 
   useFrame((state, delta) => {
@@ -64,6 +75,14 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
       const tx = camX - Math.min(1.3, 0.75 * aspect);
       const k = 1 - Math.pow(0.88, Math.min(delta, 0.5) * 60);
       group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, tx, k);
+      // wheels roll with the distance travelled (forward or backward)
+      const gx = group.current.position.x;
+      if (lastX.current !== null) {
+        const dx = gx - lastX.current;
+        if (Math.abs(dx) < 5) wheelAngle.current -= dx; // radians * r ; divided per wheel below
+      }
+      lastX.current = gx;
+      for (const wr of Object.values(wheelRefs.current)) if (wr && wr.obj) wr.obj.rotation.z = wheelAngle.current / wr.r;
       bob.current += delta;
       const t = bob.current;
       group.current.position.y = HERO_Y + Math.sin(t * 2.2) * 0.03;
@@ -96,6 +115,14 @@ export function Hero({ scrollProgress, cameraGroup, photo, transitionActive }) {
       {Object.entries(VEHICLES).map(([k, v]) => (
         <group key={k} ref={(el) => (vehicleRefs.current[k] = el)} scale={k === "bicycle" ? 1 : 0}>
           <PaperSprite paint={v.paint} w={v.w} h={v.h} position={[0, v.h / 2, 0]} />
+          {v.wheels && v.wheels.map((wh, i) => {
+            const pl = wheelPlacement(v, wh);
+            return (
+              <group key={i} position={[pl.x, pl.y, 0.02]} ref={(el) => { wheelRefs.current[k + i] = el ? { obj: el, r: pl.r } : null; }}>
+                <PaperSprite paint={wh.paint} w={pl.r * 2.1} h={pl.r * 2.1} thickness={false} />
+              </group>
+            );
+          })}
           {/* rider */}
           {!v.hideBody && <PaperSprite paint={S.heroBody} w={0.7} h={0.7} position={[0.02, v.seatY + 0.3, 0.06]} thickness={false} />}
           <mesh position={[0, v.headY + 0.02, v.headZ ?? 0.12]} scale={v.headScale ?? 1}>

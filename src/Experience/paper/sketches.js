@@ -156,6 +156,41 @@ export function certificate(ctx, W, H) {
   sketchPoly(ctx, roundedRectPts(n.x(0.16), n.y(0.14), n.x(0.14), n.y(0.12), 6), C.blue, { width: 2, passes: 1, seed: 1 });
 }
 
+export function flagUS(ctx, W, H) {
+  const n = N(W, H);
+  sketchStroke(ctx, [[n.x(0.1), n.y(0.98)], [n.x(0.1), n.y(0.05)]], { width: lw(W, H), color: C.brown, seed: 1 });
+  const quad = P(n, [[0.12, 0.08], [0.95, 0.12], [0.92, 0.6], [0.12, 0.62]]);
+  fillPoly(ctx, quad, C.white);
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(quad[0][0], quad[0][1]); for (let i = 1; i < 4; i++) ctx.lineTo(quad[i][0], quad[i][1]); ctx.closePath(); ctx.clip();
+  for (let i = 0; i < 7; i++) if (i % 2 === 0) { ctx.fillStyle = C.red; ctx.fillRect(n.x(0.1), n.y(0.08 + i * 0.078), n.x(0.9), n.y(0.039)); }
+  ctx.fillStyle = C.deep; ctx.fillRect(n.x(0.12), n.y(0.08), n.x(0.34), n.y(0.28));
+  ctx.fillStyle = C.white;
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) { ctx.beginPath(); ctx.arc(n.x(0.17 + c * 0.08), n.y(0.13 + r * 0.09), n.s(0.012), 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+  sketchStroke(ctx, quad, { close: true, width: lw(W, H), seed: 2 });
+}
+
+// video camera (映像学科)
+export function videoCamera(ctx, W, H) {
+  const n = N(W, H);
+  // body
+  sketchPoly(ctx, roundedRectPts(n.x(0.2), n.y(0.35), n.x(0.5), n.y(0.4), n.s(0.06)), C.dark, { width: lw(W, H), seed: 2 });
+  // lens
+  sketchPoly(ctx, P(n, [[0.7, 0.42], [0.92, 0.32], [0.92, 0.78], [0.7, 0.68]]), C.grey, { width: lw(W, H), seed: 3 });
+  sketchCircle(ctx, n.x(0.9), n.y(0.55), n.s(0.07), C.blue, { width: 2, passes: 1, seed: 4 });
+  // film reels on top
+  sketchCircle(ctx, n.x(0.33), n.y(0.22), n.s(0.14), C.grey, { width: lw(W, H), seed: 5 });
+  sketchCircle(ctx, n.x(0.58), n.y(0.22), n.s(0.14), C.grey, { width: lw(W, H), seed: 6 });
+  sketchCircle(ctx, n.x(0.33), n.y(0.22), n.s(0.04), C.dark, { width: 2, passes: 1 });
+  sketchCircle(ctx, n.x(0.58), n.y(0.22), n.s(0.04), C.dark, { width: 2, passes: 1 });
+  // viewfinder + rec light
+  sketchPoly(ctx, roundedRectPts(n.x(0.08), n.y(0.4), n.x(0.14), n.y(0.14), 4), C.grey, { width: 2, passes: 1, seed: 7 });
+  sketchCircle(ctx, n.x(0.3), n.y(0.45), n.s(0.025), C.red, { width: 1.5, passes: 1 });
+  // handle / tripod stub
+  sketchStroke(ctx, [[n.x(0.45), n.y(0.75)], [n.x(0.45), n.y(0.95)]], { width: lw(W, H) * 1.5, color: C.dark, seed: 8 });
+}
+
 // ---------- scene 2: 本業 ----------
 export function rocket(ctx, W, H) {
   const n = N(W, H);
@@ -264,10 +299,6 @@ export function enoden(ctx, W, H) {
   sketchStroke(ctx, [[n.x(0.4), n.y(0.14)], [n.x(0.5), n.y(0.04)], [n.x(0.6), n.y(0.14)]], { width: 3, passes: 1 });
   // headlight + wheels
   sketchCircle(ctx, n.x(0.9), n.y(0.62), n.s(0.03), C.yellow, { width: 2, passes: 1 });
-  sketchCircle(ctx, n.x(0.22), n.y(0.86), n.s(0.08), C.dark, { width: 3, seed: 3 });
-  sketchCircle(ctx, n.x(0.42), n.y(0.86), n.s(0.08), C.dark, { width: 3, seed: 4 });
-  sketchCircle(ctx, n.x(0.62), n.y(0.86), n.s(0.08), C.dark, { width: 3, seed: 5 });
-  sketchCircle(ctx, n.x(0.8), n.y(0.86), n.s(0.08), C.dark, { width: 3, seed: 6 });
 }
 
 export function surfboard(ctx, W, H) {
@@ -415,13 +446,27 @@ export function foxHead(ctx, W, H) {
   sketchCircle(ctx, n.x(0.5), n.y(0.7), n.s(0.04), C.ink, { width: 1, passes: 1 });
 }
 
-export function bicycle(ctx, W, H) {
+// bicycle wheel drawn alone (rotated at runtime)
+export function wheel(ctx, W, H) {
   const n = N(W, H);
-  const wheel = (cx) => {
-    sketchCircle(ctx, n.x(cx), n.y(0.72), n.s(0.24), "rgba(0,0,0,0)", { width: lw(W, H) * 1.3, seed: cx * 10 });
-    for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; sketchStroke(ctx, [[n.x(cx), n.y(0.72)], [n.x(cx) + Math.cos(a) * n.s(0.22), n.y(0.72) + Math.sin(a) * n.s(0.22)]], { width: 2, passes: 1, seed: i }); }
-  };
-  wheel(0.22); wheel(0.78);
+  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.46), "rgba(0,0,0,0)", { width: lw(W, H) * 2.4, seed: 3 });
+  for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; sketchStroke(ctx, [[n.x(0.5), n.y(0.5)], [n.x(0.5) + Math.cos(a) * n.s(0.42), n.y(0.5) + Math.sin(a) * n.s(0.42)]], { width: 3, passes: 1, seed: i }); }
+  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.06), C.dark, { width: 2, passes: 1 });
+  // valve + reflector so the rotation is visible
+  sketchPoly(ctx, roundedRectPts(n.x(0.47), n.y(0.05), n.x(0.06), n.y(0.09), 3), C.dark, { width: 1.5, passes: 1 });
+  sketchCircle(ctx, n.x(0.5) + Math.cos(0.9) * n.s(0.3), n.y(0.5) + Math.sin(0.9) * n.s(0.3), n.s(0.05), C.orange, { width: 2, passes: 1 });
+}
+
+export function trainWheel(ctx, W, H) {
+  const n = N(W, H);
+  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.45), C.dark, { width: lw(W, H) * 1.5, seed: 3 });
+  sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.12), C.grey, { width: 2, passes: 1 });
+  sketchStroke(ctx, [[n.x(0.5), n.y(0.5)], [n.x(0.5), n.y(0.12)]], { width: 4, passes: 1, color: C.grey });
+}
+
+// bicycle frame without wheels
+export function bicycleFrame(ctx, W, H) {
+  const n = N(W, H);
   sketchStroke(ctx, P(n, [[0.22, 0.72], [0.45, 0.4], [0.78, 0.72]]), { width: lw(W, H), color: C.deep, seed: 1 });
   sketchStroke(ctx, P(n, [[0.45, 0.4], [0.5, 0.72], [0.22, 0.72]]), { width: lw(W, H), color: C.deep, seed: 2 });
   sketchStroke(ctx, P(n, [[0.5, 0.72], [0.68, 0.38], [0.78, 0.72]]), { width: lw(W, H), color: C.deep, seed: 3 });
@@ -431,12 +476,9 @@ export function bicycle(ctx, W, H) {
   sketchPoly(ctx, roundedRectPts(n.x(0.8), n.y(0.3), n.x(0.14), n.y(0.12), 6), C.cream, { width: 3, seed: 7 }); // basket
 }
 
-export function bagelCycle(ctx, W, H) {
-  bicycle(ctx, W, H);
-  const n = N(W, H);
-  const ring = (cx) => {
-    ctx.save(); ctx.translate(n.x(cx) - n.s(0.27), n.y(0.72) - n.s(0.27)); ctx.scale(0.54 * Math.min(W, H) / W, 0.54 * Math.min(W, H) / H);
-    bagel(ctx, W, H); ctx.restore();
-  };
-  ring(0.22); ring(0.78);
-}
+// wheel geometry of the bicycle sprite (fractions of the 1.7 x 1.2 sprite)
+export const BICYCLE_WHEELS = [
+  { x: 0.22, y: 0.72, r: 0.24 },
+  { x: 0.78, y: 0.72, r: 0.24 },
+];
+export const ENODEN_WHEELS = [0.22, 0.42, 0.62, 0.8].map((x) => ({ x, y: 0.86, r: 0.08 }));

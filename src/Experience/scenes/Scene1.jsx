@@ -18,11 +18,11 @@ export default function Scene1({ x0, data }) {
       {/* props */}
       <PaperSprite paint={S.cherryTree} w={2.6} h={3.0} position={[x0 + 0.9, G + 1.5, -1.9]} />
       <PaperSprite paint={S.pencil} w={1.6} h={0.5} position={[x0 + 5.3, 3.15, -1.6]} rotation={[0, 0, 0.35]} sway={0.03} seedOffset={1} />
-      <PaperSprite paint={S.palette} w={1.2} h={1.0} position={[x0 + 10.4, 3.15, -1.7]} sway={0.03} seedOffset={2} />
+      <PaperSprite paint={S.videoCamera} w={1.3} h={1.0} position={[x0 + 10.4, 3.15, -1.7]} sway={0.03} seedOffset={2} />
       <Stick x={x0 + 10.4} top={3.0} bottom={G} z={-1.75} />
       <PaperSprite paint={S.jsBadge} w={0.8} h={0.8} position={[x0 + 12.4, 3.3, -1.6]} rotation={[0, 0, -0.1]} sway={0.04} seedOffset={3} />
       <PaperSprite paint={S.flagJP} w={0.8} h={1.4} position={[x0 + 13.6, G + 0.7, -1.4]} />
-      <PaperSprite paint={S.flagUA} w={0.8} h={1.4} position={[x0 + 14.5, G + 0.7, -1.3]} />
+      <PaperSprite paint={S.flagUS} w={0.8} h={1.4} position={[x0 + 14.5, G + 0.7, -1.3]} />
       <PaperSprite paint={S.certificate} w={1.1} h={0.85} position={[x0 + 11.6, G + 0.45, -1.2]} rotation={[0, 0, 0.05]} />
 
       {/* sky */}

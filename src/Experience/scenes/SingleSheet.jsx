@@ -4,6 +4,29 @@ import { PaperSprite, Stick } from "../paper/PaperSprite";
 import { paperFill, notebookLines } from "../paper/canvasUtils";
 import * as S from "../paper/sketches";
 import { SHEET_GAP } from "../curve";
+import { Html } from "@react-three/drei";
+
+// paper frame + YouTube iframe (CSS3D, placed on the sheet)
+function VideoFrame({ id, position, tilt = 0 }) {
+  const framePaint = useMemo(() => (ctx, W, H) => { paperFill(ctx, W, H, "#fbfaf7", 21); }, []);
+  return (
+    <group position={position} rotation={[0, 0, tilt]}>
+      <PaperCard w={2.8} h={1.7} radius={0.03} paint={framePaint} hoverLift={0} />
+      <Html transform position={[0, 0.06, 0.04]} scale={0.235} zIndexRange={[5, 0]} style={{ pointerEvents: "auto" }}>
+        <iframe
+          width="480" height="270"
+          src={`https://www.youtube-nocookie.com/embed/${id}`}
+          title="YouTube video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          style={{ display: "block", borderRadius: 6, background: "#000" }}
+        />
+      </Html>
+    </group>
+  );
+}
 
 // The blank page shown while the world loops around. Holds the music easter egg.
 export default function SingleSheet({ x0, data }) {
@@ -18,11 +41,11 @@ export default function SingleSheet({ x0, data }) {
       <TitleCard text={data.sign.join("\n")} color="#efe0c2" textColor="#4a3b22" w={1.9} h={1.3} position={[cx - 2.0, 3.2, -1.1]} rotation={[0, 0, -0.05]} />
       <PaperSprite paint={S.musicNote} w={1.0} h={1.1} position={[cx + 0.3, 3.5, -1.2]} sway={0.05} seedOffset={20} />
       <PaperSprite paint={S.headphones} w={1.1} h={0.9} position={[cx + 2.0, 3.3, -1.2]} sway={0.03} seedOffset={21} />
-      {data.cards.map((c, i) => (
-        <TextCard key={i} heading={c.heading} lines={c.lines} w={2.1} h={1.4} position={[cx - 2.4 + i * 2.4, 1.5, -1.0 + i * 0.05]} rotation={[0, 0, (i - 1) * 0.03]} />
-      ))}
-      {data.follow && <Handwriting lines={data.follow} size={0.17} w={4.6} h={0.75} align="center" position={[cx, 0.3, -0.9]} rotation={[0, 0, -0.02]} url={data.followUrl} />}
-      <Stick x={cx + 0.3} top={3.0} bottom={-3} z={-1.25} />
+      {data.videos
+        ? data.videos.map((v, i) => <VideoFrame key={v.id} id={v.id} position={[cx - 1.5 + i * 3.0, 1.55, -1.0]} tilt={(i ? 1 : -1) * 0.02} />)
+        : data.cards.map((c, i) => (
+          <TextCard key={i} heading={c.heading} lines={c.lines} w={2.1} h={1.4} position={[cx - 2.4 + i * 2.4, 1.5, -1.0 + i * 0.05]} rotation={[0, 0, (i - 1) * 0.03]} />
+        ))}
     </group>
   );
 }
