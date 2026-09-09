@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { assetUrl } from "../assetUrl";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { PaperSprite } from "./paper/PaperSprite";
@@ -35,7 +36,7 @@ function useHeadTexture(src) {
   useEffect(() => {
     if (!src) return;
     const im = new Image(); im.crossOrigin = "anonymous";
-    im.onload = () => setImg(im); im.onerror = () => setImg(null); im.src = src;
+    im.onload = () => setImg(im); im.onerror = () => setImg(null); im.src = assetUrl(src);
   }, [src]);
   return useMemo(() => {
     const px = 512;

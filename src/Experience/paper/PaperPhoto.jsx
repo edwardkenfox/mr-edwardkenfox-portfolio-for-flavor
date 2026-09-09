@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { assetUrl } from "../../assetUrl";
 import { PaperCard, PX } from "./PaperCard";
 import { paperFill, sketchStroke, roundedRectPts, drawText, FONT_TITLE, FONT_JP, rng } from "./canvasUtils";
 
@@ -11,7 +12,7 @@ function useImage(src) {
     im.crossOrigin = "anonymous";
     im.onload = () => setImg(im);
     im.onerror = () => setImg(null);
-    im.src = src;
+    im.src = assetUrl(src);
   }, [src]);
   return img;
 }
