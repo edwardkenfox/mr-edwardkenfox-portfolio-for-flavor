@@ -99,31 +99,36 @@ function pathTex(px = 512) {
  * Notebook wall + green floor + sandy path, spanning `width` world units from x=0.
  * Colour of the floor per scene can be overridden by `floorColor` bands.
  */
+const LOOP_OFFSETS = [-88, 0, 88];
+const EXTRA = 60; // planes extend one seam beyond the world on both sides
+
 export function Environment({ width, floorBands = [] }) {
-  const wall = useMemo(() => { const t = notebookTex(); t.repeat.set(width / 8, 20 / 8); return t; }, [width]);
+  const wall = useMemo(() => { const t = notebookTex(); t.repeat.set((width + EXTRA) / 8, 20 / 8); return t; }, [width]);
   const margin = useMemo(() => { const t = marginTex(); t.repeat.set(1, 20 / 4); return t; }, []);
-  const grassT = useMemo(() => { const t = grassTex(); t.repeat.set(width / 4, FLOOR_DEPTH / 4); return t; }, [width]);
-  const path = useMemo(() => { const t = pathTex(); t.repeat.set(width / 2, 1); return t; }, [width]);
+  const grassT = useMemo(() => { const t = grassTex(); t.repeat.set((width + EXTRA) / 4, FLOOR_DEPTH / 4); return t; }, [width]);
+  const path = useMemo(() => { const t = pathTex(); t.repeat.set((width + EXTRA) / 2, 1); return t; }, [width]);
   // red margin line like a notebook
   return (
     <group>
       <mesh position={[width / 2, GROUND_Y + 10, WALL_Z]}>
-        <planeGeometry args={[width + 40, 20]} />
+        <planeGeometry args={[width + EXTRA, 20]} />
         <meshBasicMaterial map={wall} />
       </mesh>
       {/* red vertical margin lines every 16 units */}
-      {Array.from({ length: Math.ceil(width / 16) + 1 }).map((_, i) => (
-        <mesh key={i} position={[i * 16 - 1.5, GROUND_Y + 10, WALL_Z + 0.01]}>
+      {LOOP_OFFSETS.flatMap((off) => Array.from({ length: Math.ceil(width / 16) }, (_, i) => off + i * 16 - 1.5))
+        .filter((x) => x > -EXTRA / 2 && x < width + EXTRA / 2)
+        .map((x) => (
+        <mesh key={x} position={[x, GROUND_Y + 10, WALL_Z + 0.01]}>
           <planeGeometry args={[0.25, 20]} />
           <meshBasicMaterial map={margin} transparent depthWrite={false} />
         </mesh>
       ))}
       {/* floor */}
       <mesh position={[width / 2, GROUND_Y, WALL_Z + FLOOR_DEPTH / 2]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[width + 40, FLOOR_DEPTH]} />
+        <planeGeometry args={[width + EXTRA, FLOOR_DEPTH]} />
         <meshBasicMaterial map={grassT} />
       </mesh>
-      {floorBands.map((b, i) => (
+      {LOOP_OFFSETS.flatMap((off) => floorBands.map((b) => ({ ...b, x: b.x + off }))).map((b, i) => (
         <mesh key={"band" + i} position={[b.x, GROUND_Y + 0.005, WALL_Z + FLOOR_DEPTH / 2]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[b.w, FLOOR_DEPTH]} />
           <meshBasicMaterial color={b.color} transparent opacity={0.55} />
@@ -131,12 +136,12 @@ export function Environment({ width, floorBands = [] }) {
       ))}
       {/* sandy path strip */}
       <mesh position={[width / 2, GROUND_Y + 0.01, WALL_Z + 1.1]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[width + 40, 0.9]} />
+        <planeGeometry args={[width + EXTRA, 0.9]} />
         <meshBasicMaterial map={path} />
       </mesh>
       {/* floor front edge (paper thickness) */}
       <mesh position={[width / 2, GROUND_Y - 0.15, WALL_Z + FLOOR_DEPTH]}>
-        <planeGeometry args={[width + 40, 0.3]} />
+        <planeGeometry args={[width + EXTRA, 0.3]} />
         <meshBasicMaterial color="#8fb98a" />
       </mesh>
     </group>

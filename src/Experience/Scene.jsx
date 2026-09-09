@@ -14,10 +14,11 @@ import SingleSheet from "./scenes/SingleSheet";
 import content from "../content.json";
 import { debugState, debugOverlay, DEBUG } from "./debug";
 
-// During the transition curve (end of scene 5 -> start of scene 1 of the next loop)
-// the world is moved forward once the camera has passed the last props of scene 5
-// and before the first props of scene 1 come into view.
-const WORLD_SWAP_T = 0.2;
+// Looping without a visible pop: a copy of scene 1 sits one loop ahead and a copy of scene 5
+// one loop behind, so the camera always sees continuous content across the seam. The world
+// group is only moved once the camera is well inside the next scene 1, where the copy and the
+// real scene coincide exactly (the environment tiles every 8 units and 88 is a multiple of 8).
+const MAIN_SWAP_P = 0.05;
 const SHEET_FORWARD_TRIGGER = 0.5;
 const SHEET_BACK_TRIGGER = 0.35;
 
@@ -70,10 +71,10 @@ const Scene = ({ cameraGroup, camera, scrollProgress, targetScrollProgress, lerp
 
     const n = cam.loopCounter.current;
     if (cam.transitionCurveActive.current) {
-      setLoop(worldRef, p >= WORLD_SWAP_T ? n : n - 1);
+      setLoop(worldRef, n - 1);
       setLoop(sheetRef, n);
     } else {
-      setLoop(worldRef, n - 1);
+      setLoop(worldRef, p >= MAIN_SWAP_P ? n - 1 : n - 2);
       if (p >= SHEET_FORWARD_TRIGGER) setLoop(sheetRef, n);
       else if (p <= SHEET_BACK_TRIGGER) setLoop(sheetRef, n - 1);
     }
@@ -104,6 +105,9 @@ const Scene = ({ cameraGroup, camera, scrollProgress, targetScrollProgress, lerp
         <Scene3 x0={32} data={content.scene3} />
         <Scene4 x0={48} data={content.scene4} />
         <Scene5 x0={64} data={content.scene5} />
+        {/* seam copies (see MAIN_SWAP_P) */}
+        <Scene1 x0={SHIFT_X_AMOUNT} data={content.scene1} />
+        <Scene5 x0={64 - SHIFT_X_AMOUNT} data={content.scene5} />
       </group>
       <group ref={sheetRef}>
         {/* starts in the gap before scene 1; shifted forward by one world width mid-scroll so it sits in the gap after scene 5 */}
