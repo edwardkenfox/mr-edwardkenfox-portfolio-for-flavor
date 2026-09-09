@@ -236,7 +236,7 @@ export function chart100(ctx, W, H) {
   sketchPoly(ctx, roundedRectPts(n.x(0.05), n.y(0.05), n.x(0.9), n.y(0.9), n.s(0.05)), C.white, { width: lw(W, H), seed: 3 });
   const bars = [0.25, 0.4, 0.55, 0.8];
   bars.forEach((v, i) => sketchPoly(ctx, P(n, [[0.15 + i * 0.19, 0.8], [0.29 + i * 0.19, 0.8], [0.29 + i * 0.19, 0.8 - v * 0.55], [0.15 + i * 0.19, 0.8 - v * 0.55]]), [C.blue, C.blue, C.teal, C.orange][i], { width: 3, seed: i }));
-  drawText(ctx, ["100社+"], { x: n.x(0.5), y: n.y(0.08), size: n.s(0.16), font: FONT_TITLE, align: "center" });
+  drawText(ctx, ["200社+"], { x: n.x(0.5), y: n.y(0.08), size: n.s(0.16), font: FONT_TITLE, align: "center" });
 }
 
 export function building(ctx, W, H) {
