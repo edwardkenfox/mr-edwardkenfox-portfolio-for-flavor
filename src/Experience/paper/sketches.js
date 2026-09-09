@@ -176,10 +176,11 @@ export function flagUS(ctx, W, H) {
   fillPoly(ctx, quad, C.white);
   ctx.save();
   ctx.beginPath(); ctx.moveTo(quad[0][0], quad[0][1]); for (let i = 1; i < 4; i++) ctx.lineTo(quad[i][0], quad[i][1]); ctx.closePath(); ctx.clip();
-  for (let i = 0; i < 7; i++) if (i % 2 === 0) { ctx.fillStyle = C.red; ctx.fillRect(n.x(0.1), n.y(0.08 + i * 0.078), n.x(0.9), n.y(0.039)); }
-  ctx.fillStyle = C.deep; ctx.fillRect(n.x(0.12), n.y(0.08), n.x(0.34), n.y(0.28));
+  const top = 0.08, bottom = 0.62, stripe = (bottom - top) / 13;
+  for (let i = 0; i < 13; i += 2) { ctx.fillStyle = C.red; ctx.fillRect(n.x(0.1), n.y(top + i * stripe), n.x(0.9), n.y(stripe) + 0.5); }
+  ctx.fillStyle = C.deep; ctx.fillRect(n.x(0.12), n.y(top), n.x(0.34), n.y(stripe * 7));
   ctx.fillStyle = C.white;
-  for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) { ctx.beginPath(); ctx.arc(n.x(0.17 + c * 0.08), n.y(0.13 + r * 0.09), n.s(0.012), 0, Math.PI * 2); ctx.fill(); }
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) { ctx.beginPath(); ctx.arc(n.x(0.16 + c * 0.065), n.y(top + stripe * (1 + r * 1.7)), n.s(0.011), 0, Math.PI * 2); ctx.fill(); }
   ctx.restore();
   sketchStroke(ctx, quad, { close: true, width: lw(W, H), seed: 2 });
 }
@@ -384,20 +385,35 @@ export function armchair(ctx, W, H) {
 
 export function roomSet(ctx, W, H) {
   const n = N(W, H);
-  // rug
-  sketchPoly(ctx, ellipsePts(n.x(0.5), n.y(0.85), n.s(0.45), n.s(0.1), 30), C.pink, { width: 3, seed: 1 });
-  // sofa
-  sketchPoly(ctx, roundedRectPts(n.x(0.1), n.y(0.5), n.x(0.5), n.y(0.3), n.s(0.05)), C.blue, { width: lw(W, H), seed: 2 });
-  sketchPoly(ctx, roundedRectPts(n.x(0.12), n.y(0.36), n.x(0.46), n.y(0.18), n.s(0.05)), C.blue, { width: 3, seed: 3 });
-  // lamp
-  sketchStroke(ctx, [[n.x(0.78), n.y(0.8)], [n.x(0.78), n.y(0.3)]], { width: lw(W, H), color: C.brown, seed: 4 });
-  sketchPoly(ctx, P(n, [[0.66, 0.32], [0.9, 0.32], [0.84, 0.14], [0.72, 0.14]]), C.yellow, { width: 3, seed: 5 });
-  // plant
-  sketchPoly(ctx, P(n, [[0.62, 0.8], [0.7, 0.8], [0.69, 0.66], [0.63, 0.66]]), C.orange, { width: 3, seed: 6 });
-  for (let i = 0; i < 3; i++) sketchPoly(ctx, ellipsePts(n.x(0.66 + (i - 1) * 0.06), n.y(0.55 - Math.abs(i - 1) * 0.02), n.s(0.035), n.s(0.08), 12), C.green, { width: 2, seed: i + 7, passes: 1 });
-  // price tag
-  sketchPoly(ctx, P(n, [[0.3, 0.2], [0.5, 0.2], [0.5, 0.32], [0.3, 0.32], [0.26, 0.26]]), C.cream, { width: 3, seed: 10 });
-  drawText(ctx, ["¥"], { x: n.x(0.4), y: n.y(0.2), size: n.s(0.1), font: FONT_EN, align: "center" });
+  const o = { wobble: 1, passes: 1 };
+  // rug (flat ellipse with an inner border)
+  sketchPoly(ctx, ellipsePts(n.x(0.5), n.y(0.88), n.s(0.47), n.s(0.075), 40), C.pink, { ...o, width: 3, seed: 1 });
+  ctx.save(); ctx.strokeStyle = "#d98aa0"; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(n.x(0.5), n.y(0.88), n.s(0.4), n.s(0.05), 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  // sofa: backrest, seat, arms, legs
+  const lwv = lw(W, H);
+  sketchPoly(ctx, roundedRectPts(n.x(0.14), n.y(0.4), n.x(0.42), n.y(0.22), n.s(0.05)), C.blue, { ...o, width: lwv, seed: 2 });   // backrest
+  sketchPoly(ctx, roundedRectPts(n.x(0.12), n.y(0.6), n.x(0.46), n.y(0.14), n.s(0.04)), C.blue, { ...o, width: lwv, seed: 3 });   // seat
+  sketchStroke(ctx, [[n.x(0.35), n.y(0.61)], [n.x(0.35), n.y(0.73)]], { width: 2, passes: 1, color: "#4f7fb0" });                  // cushion split
+  sketchPoly(ctx, roundedRectPts(n.x(0.08), n.y(0.54), n.x(0.08), n.y(0.2), n.s(0.03)), C.blue, { ...o, width: lwv, seed: 4 });   // left arm
+  sketchPoly(ctx, roundedRectPts(n.x(0.54), n.y(0.54), n.x(0.08), n.y(0.2), n.s(0.03)), C.blue, { ...o, width: lwv, seed: 5 });   // right arm
+  for (const lx of [0.15, 0.55]) sketchStroke(ctx, [[n.x(lx), n.y(0.74)], [n.x(lx), n.y(0.82)]], { width: lwv * 1.4, color: C.brown, passes: 1 });
+  // floor lamp: base, pole, shade
+  sketchPoly(ctx, ellipsePts(n.x(0.8), n.y(0.82), n.s(0.07), n.s(0.02), 20), C.dark, { ...o, width: 2, seed: 6 });
+  sketchStroke(ctx, [[n.x(0.8), n.y(0.82)], [n.x(0.8), n.y(0.3)]], { width: lwv, color: C.brown, passes: 1 });
+  sketchPoly(ctx, P(n, [[0.71, 0.3], [0.89, 0.3], [0.86, 0.14], [0.74, 0.14]]), C.yellow, { ...o, width: lwv, seed: 7 });
+  // potted plant
+  sketchPoly(ctx, P(n, [[0.615, 0.82], [0.685, 0.82], [0.675, 0.7], [0.625, 0.7]]), C.orange, { ...o, width: 2.5, seed: 8 });
+  sketchPoly(ctx, P(n, [[0.61, 0.7], [0.69, 0.7], [0.69, 0.66], [0.61, 0.66]]), C.orange, { ...o, width: 2.5, seed: 9 });
+  sketchStroke(ctx, [[n.x(0.65), n.y(0.66)], [n.x(0.65), n.y(0.52)]], { width: 2.5, color: C.darkgreen, passes: 1 });
+  for (let i = 0; i < 5; i++) {
+    const a = -Math.PI / 2 + (i - 2) * 0.55;
+    const cx = n.x(0.65) + Math.cos(a) * n.s(0.07), cy = n.y(0.56) + Math.sin(a) * n.s(0.07);
+    const pts = ellipsePts(0, 0, n.s(0.055), n.s(0.022), 14).map(([x, y]) => [cx + x * Math.cos(a) - y * Math.sin(a), cy + x * Math.sin(a) + y * Math.cos(a)]);
+    sketchPoly(ctx, pts, C.green, { ...o, width: 2, seed: 10 + i });
+  }
+  // small price tag hanging from the lamp shade
+  sketchPoly(ctx, P(n, [[0.9, 0.34], [0.98, 0.34], [0.98, 0.42], [0.9, 0.42], [0.88, 0.38]]), C.cream, { ...o, width: 2, seed: 20 });
+  drawText(ctx, ["¥"], { x: n.x(0.945), y: n.y(0.345), size: n.s(0.055), font: FONT_EN, align: "center" });
 }
 
 export function dashboard(ctx, W, H) {
@@ -477,7 +493,6 @@ export function wheel(ctx, W, H) {
   sketchCircle(ctx, n.x(0.5), n.y(0.5), n.s(0.06), C.dark, { width: 2, passes: 1 });
   // valve + reflector so the rotation is visible
   sketchPoly(ctx, roundedRectPts(n.x(0.47), n.y(0.05), n.x(0.06), n.y(0.09), 3), C.dark, { width: 1.5, passes: 1 });
-  sketchCircle(ctx, n.x(0.5) + Math.cos(0.9) * n.s(0.3), n.y(0.5) + Math.sin(0.9) * n.s(0.3), n.s(0.05), C.orange, { width: 2, passes: 1 });
 }
 
 export function trainWheel(ctx, W, H) {

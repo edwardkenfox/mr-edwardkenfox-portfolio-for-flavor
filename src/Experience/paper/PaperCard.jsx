@@ -110,9 +110,6 @@ export function TitleCard({ text, color = "#b9b1d6", textColor = "#2f2a44", w = 
     ctx.fillStyle = fg;
     ctx.beginPath(); ctx.moveTo(W, H - c); ctx.lineTo(W - c, H); ctx.lineTo(W - c * 0.92, H - c * 0.92); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = "rgba(0,0,0,0.25)"; ctx.lineWidth = 1.5; ctx.stroke();
-    // soft shadow the flap casts onto the note
-    ctx.globalAlpha = 0.18; ctx.fillStyle = "#000";
-    ctx.beginPath(); ctx.moveTo(W - c * 0.92, H - c * 0.92); ctx.lineTo(W - c * 1.15, H - c * 0.55); ctx.lineTo(W - c * 0.55, H - c * 1.15); ctx.closePath(); ctx.fill();
     ctx.restore();
     // push pin at the top centre
     const px = W / 2, py = H * 0.085, pr = Math.min(W, H) * 0.045;
