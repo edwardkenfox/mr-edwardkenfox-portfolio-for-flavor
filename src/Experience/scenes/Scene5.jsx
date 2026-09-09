@@ -20,7 +20,6 @@ export default function Scene5({ x0, data }) {
       <Stick x={x0 + 1.3} top={2.6} bottom={G} z={-1.65} />
       <PaperSprite paint={S.roomSet} w={3.2} h={2.4} position={[x0 + 9.3, G + 1.2, -1.9]} />
       <PaperSprite paint={S.sparkle} w={1.0} h={1.0} position={[x0 + 10.6, 1.9, -1.4]} sway={0.03} seedOffset={15} />
-      <PaperSprite paint={S.armchair} w={1.2} h={1.1} position={[x0 + 6.0, G + 0.55, -1.4]} />
       <PaperSprite paint={S.cloud} w={1.5} h={0.85} position={[x0 + 6.4, 4.4, -2.1]} sway={0.01} seedOffset={7} />
 
       <PaperSprite paint={S.grass} w={0.9} h={0.55} position={[x0 + 3.2, G + 0.27, 2.1]} />
