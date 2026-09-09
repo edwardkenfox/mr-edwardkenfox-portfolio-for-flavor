@@ -101,13 +101,13 @@ const Scene = ({ cameraGroup, camera, scrollProgress, targetScrollProgress, lerp
           { x: 72, w: 16, color: "#efe5d8" },   // scene 5: wooden floor
         ]} />
         <Scene1 x0={0} data={content.scene1} />
-        <Scene2 x0={16} data={content.scene2} />
+        <Scene2 x0={18} data={content.scene2} />
         <Scene3 x0={32} data={content.scene3} />
         <Scene4 x0={48} data={content.scene4} />
         <Scene5 x0={64} data={content.scene5} />
         {/* seam copies (see MAIN_SWAP_P) */}
         <Scene1 x0={SHIFT_X_AMOUNT} data={content.scene1} />
-        <Scene5 x0={64 - SHIFT_X_AMOUNT} data={content.scene5} />
+        <Scene5 x0={60 - SHIFT_X_AMOUNT} data={content.scene5} />
       </group>
       <group ref={sheetRef}>
         {/* starts in the gap before scene 1; shifted forward by one world width mid-scroll so it sits in the gap after scene 5 */}

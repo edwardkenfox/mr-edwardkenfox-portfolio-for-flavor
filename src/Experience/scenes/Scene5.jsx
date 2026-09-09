@@ -14,7 +14,6 @@ export default function Scene5({ x0, data }) {
       <TitleCard text={data.title} color="#c9dfc2" textColor="#25412a" w={2.8} h={1.9} position={[x0 + 1.6, 3.2, -1.0]} rotation={[0, 0, 0.03]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.9} h={1.55} position={[x0 + 4.6, 2.0, -0.7]} rotation={[0, 0, -0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={2.7} h={1.5} position={[x0 + 7.5, 2.0, -0.6]} rotation={[0, 0, 0.02]} />
-      <Handwriting lines={data.closing} size={0.17} w={3.0} h={0.9} position={[x0 + 9.6, 3.3, -0.9]} rotation={[0, 0, -0.03]} />
 
       <PaperSprite paint={S.dashboard} w={1.5} h={1.4} position={[x0 + 1.3, 3.2, -1.6]} sway={0.02} seedOffset={14} />
       <Stick x={x0 + 1.3} top={2.6} bottom={G} z={-1.65} />

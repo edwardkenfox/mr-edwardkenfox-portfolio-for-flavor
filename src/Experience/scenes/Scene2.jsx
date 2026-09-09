@@ -13,7 +13,7 @@ export default function Scene2({ x0, data }) {
       <TitleCard text={data.title} color="#f6c9a0" textColor="#5a3a1a" position={[x0 + 1.9, 3.2, -1.0]} rotation={[0, 0, -0.04]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.9} h={1.8} position={[x0 + 4.6, 1.9, -0.7]} rotation={[0, 0, 0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={2.6} h={1.5} position={[x0 + 8.2, 2.0, -0.8]} rotation={[0, 0, -0.02]} />
-      <Handwriting lines={data.recenoNote} size={0.15} w={3.6} h={1.4} position={[x0 + 12.4, 2.0, -0.9]} rotation={[0, 0, 0.02]} />
+      <Handwriting lines={data.recenoNote} size={0.15} w={3.6} h={1.4} position={[x0 + 12.7, 1.0, -0.9]} rotation={[0, 0, 0.02]} />
 
       <PaperSprite paint={S.patent} w={1.1} h={1.3} position={[x0 + 1.2, G + 0.65, -1.4]} rotation={[0, 0, 0.05]} />
       <PaperSprite paint={S.chart100} w={1.5} h={1.2} position={[x0 + 10.6, 3.35, -1.6]} sway={0.02} seedOffset={5} />

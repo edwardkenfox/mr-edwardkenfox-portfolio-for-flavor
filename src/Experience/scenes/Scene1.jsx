@@ -13,8 +13,8 @@ export default function Scene1({ x0, data }) {
       <TitleCard text={data.title} color="#b9b1d6" position={[x0 + 1.8, 3.2, -1.0]} rotation={[0, 0, 0.04]} />
       <TextCard heading={c1.heading} lines={c1.lines} w={2.7} h={1.75} position={[x0 + 4.2, 1.85, -0.8]} rotation={[0, 0, -0.02]} />
       <TextCard heading={c2.heading} lines={c2.lines} w={3.1} h={2.0} position={[x0 + 8.0, 1.95, -0.6]} rotation={[0, 0, 0.015]} />
-      <TextCard heading={c3.heading} lines={c3.lines} w={2.7} h={1.75} position={[x0 + 4.2, 1.85, -0.8]} rotation={[0, 0, -0.02]} />
-      <Handwriting lines={[data.footnote]} size={0.12} w={4.2} h={0.6} position={[x0 + 12.6, 1.0, -0.9]} rotation={[0, 0, -0.03]} />
+      <TextCard heading={c3.heading} lines={c3.lines} w={2.7} h={1.75} position={[x0 + 12.2, 1.85, -0.8]} rotation={[0, 0, -0.0]} />
+      <Handwriting lines={[data.footnote]} size={0.12} w={4.2} h={0.6} position={[x0 + 16.6, 1.0, -0.9]} rotation={[0, 0, -0.03]} />
 
       {/* props */}
       <PaperSprite paint={S.cherryTree} w={3.0} h={3.2} position={[x0 + 0.9, G + 1.6, -1.9]} />
