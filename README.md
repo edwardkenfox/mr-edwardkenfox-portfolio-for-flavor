@@ -9,7 +9,7 @@
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # dist/ に静的ファイルを出力（Vercel / Netlify / GitHub Pages などにそのまま置ける）
+npm run build    # dist/ に静的ファイルを出力
 ```
 
 `?debug` を付けて開くと progress / fps / 主人公の座標が左下に出ます（dev のみ）。
@@ -36,3 +36,18 @@ npm run build    # dist/ に静的ファイルを出力（Vercel / Netlify / Git
 | `src/Experience/paper/Environment.jsx` | ノートの壁・芝生の床・小道 |
 
 フォントは Google Fonts（Zen Kurenaido / Yomogi / Patrick Hand）。オフライン時は 4 秒でフォールバックして起動します。
+
+## デプロイ（Cloudflare Pages）
+
+Cloudflare ダッシュボードの Workers & Pages → Create → Pages → Connect to Git でこのリポジトリを選び、次の設定で作成します。
+
+| 項目 | 値 |
+|---|---|
+| Framework preset | Vite |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node.js | `.node-version`（22）が自動で使われる |
+
+`main` に push するたびに自動でビルド・公開されます。サイトはルート配信なので追加設定は不要です。
+別のサブパス配下で配信する場合だけ、環境変数 `VITE_BASE` にそのパス（例 `/foo/`）を設定してください。
+
